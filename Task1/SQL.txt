@@ -1,0 +1,29 @@
+CREATE TABLE books (
+	id TEXT,
+	title TEXT,
+	author TEXT,
+	genre TEXT,
+	publisher TEXT,
+	year INTEGER,
+	price TEXT,
+	price_usd FLOAT
+);
+
+UPDATE books
+SET price_usd =
+    CASE
+        WHEN price LIKE '€%' THEN
+            ROUND((SUBSTRING(price FROM 2)::numeric * 1.2), 2)
+        WHEN price LIKE '$%' THEN
+            ROUND((SUBSTRING(price FROM 2)::numeric), 2)
+    END;
+
+CREATE TABLE books_summary AS
+SELECT
+    year AS publication_year,
+    COUNT(*) AS book_count,
+    ROUND(AVG(price_usd)::numeric, 2) AS average_price
+FROM books
+WHERE price_usd IS NOT NULL
+GROUP BY year
+ORDER BY year;
