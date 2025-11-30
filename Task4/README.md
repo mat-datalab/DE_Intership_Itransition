@@ -1,0 +1,1 @@
+This repository contains a set of folders, each including a complete data-processing workflow: a Jupyter Notebook, a summary Excel file, and the raw input data. The notebooks perform cleaning, transformations, and output generation, while the Excel files provide the final summaries. Each folder can be run independently to reproduce the full analysis process.
