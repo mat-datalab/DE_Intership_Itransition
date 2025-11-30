@@ -1,3 +1,0 @@
-Each directory contains a Jupyter notebook responsible for processing and analyzing the data. The notebooks walk through the entire workflow step by step, from loading the data, through transformation, to producing the final results.
-
-Additionally, every folder includes an Excel file that contains all final processed values generated during the analysis. This file serves as a summary of the notebook’s output and can be used independently.
