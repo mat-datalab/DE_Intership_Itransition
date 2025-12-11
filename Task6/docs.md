@@ -11,7 +11,7 @@ The main goals of the library are:
 
 Below is the detailed description of each function.
 
-1. Data Model Overview
+# Data Model Overview
 
 1.1 Enum and composite types
 CREATE TYPE name_type AS ENUM ('first', 'middle', 'last', 'title');
