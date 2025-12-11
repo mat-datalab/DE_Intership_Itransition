@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request
 import psycopg
 import os
+from dotenv import load_dotenv
 from psycopg.rows import dict_row
 from psycopg import sql
+
+load_dotenv()
 
 app = Flask(__name__)
 
