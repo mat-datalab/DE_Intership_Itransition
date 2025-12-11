@@ -13,7 +13,7 @@ Below is the detailed description of each function.
 
 # 1. Data Model Overview
 
-1.1 Enum and composite types
+## 1.1 Enum and composite types
 CREATE TYPE name_type AS ENUM ('first', 'middle', 'last', 'title');
 
 CREATE TYPE fake_user AS (
@@ -28,7 +28,7 @@ CREATE TYPE fake_user AS (
     email       TEXT
 );
 
-1.2 Lookup tables
+## 1.2 Lookup tables
 
 All lookup data is shared between locales using a locale column:
 
@@ -55,7 +55,7 @@ To extend or improve realism, it is enough to insert new rows into these tables.
 
 To guarantee reproducibility, all randomness is implemented using a simple deterministic PRNG (linear congruential generator) implemented as SQL functions.
 
-2.1 prng_next(state BIGINT) → BIGINT
+## 2.1 prng_next(state BIGINT) → BIGINT
 
 Purpose: LCG step function used internally.
 
@@ -75,7 +75,7 @@ If result is 0, it is replaced by 1.
 
 The function is IMMUTABLE, so for the same state it always returns the same new_state.
 
-2.2 prng_init(p_locale, p_seed, p_batch_index, p_index_in_batch, p_stream) → BIGINT
+## 2.2 prng_init(p_locale, p_seed, p_batch_index, p_index_in_batch, p_stream) → BIGINT
 
 Purpose: Initialize a PRNG state that uniquely corresponds to:
 
@@ -116,7 +116,7 @@ changing any of locale, seed, batch_index, index_in_batch, or stream changes the
 
 for fixed values, the sequence is always identical (reproducible).
 
-2.3 rand_uniform_01(p_locale, p_seed, p_batch_index, p_index_in_batch, p_stream) → DOUBLE PRECISION
+## 2.3 rand_uniform_01(p_locale, p_seed, p_batch_index, p_index_in_batch, p_stream) → DOUBLE PRECISION
 
 Purpose: Generate a reproducible uniform random variable in (0, 1).
 
@@ -128,7 +128,7 @@ Apply prng_next(state).
 
 Return state / 2147483648.0.
 
-2.4 rand_normal(..., p_mean, p_stddev) → DOUBLE PRECISION
+## 2.4 rand_normal(..., p_mean, p_stddev) → DOUBLE PRECISION
 
 Signature:
 
@@ -167,7 +167,7 @@ Used for:
 
 height (cm) and weight (kg), with parameters taken from physical_config.
 
-2.5 rand_on_sphere(p_locale, p_seed, p_batch_index, p_index_in_batch, p_stream) → TABLE(lat, lon)
+## 2.5 rand_on_sphere(p_locale, p_seed, p_batch_index, p_index_in_batch, p_stream) → TABLE(lat, lon)
 
 Purpose: Generate a random point uniformly distributed on the surface of a unit sphere.
 
@@ -197,7 +197,7 @@ Resulting latitude and longitude have constant probability density on the sphere
 
 # 3. Name and Title Helpers
 
-3.1 pick_random_name(p_locale, p_seed, p_batch_index, p_index_in_batch, p_stream, p_type) → TEXT
+## 3.1 pick_random_name(p_locale, p_seed, p_batch_index, p_index_in_batch, p_stream, p_type) → TEXT
 
 Purpose: Pick a random name (first/middle/last) for a locale, ignoring gender.
 
@@ -230,7 +230,7 @@ WHERE locale = p_locale AND name_type = p_type
 ORDER BY id
 OFFSET offset_ LIMIT 1;
 
-3.2 pick_random_name_g(..., p_type, p_gender) → TEXT
+## 3.2 pick_random_name_g(..., p_type, p_gender) → TEXT
 
 Same as above, but gender-aware.
 
@@ -251,7 +251,7 @@ first names (gender specific),
 
 middle names (often gender-neutral, so p_gender is NULL).
 
-3.3 pick_title_for_gender(p_locale, ..., p_stream, p_gender) → TEXT
+## 3.3 pick_title_for_gender(p_locale, ..., p_stream, p_gender) → TEXT
 
 Purpose: Generic gender-aware title selection (e.g. Ms., Mrs., Madam, Dr., Prof., Herr, Frau).
 
@@ -267,7 +267,7 @@ WHERE locale = p_locale
 
 If no rows exist for given locale + gender, returns NULL.
 
-3.4 pick_male_title(p_locale, ..., p_stream) → TEXT
+## 3.4 pick_male_title(p_locale, ..., p_stream) → TEXT
 
 Purpose: Special handling for male titles in en_US.
 
@@ -292,13 +292,13 @@ This gives realistic mixture of Mr. and Sir without separate randomness.
 
 # 4. Other Lookup Helpers
 
-4.1 pick_random_eye_color(p_locale, ..., p_stream) → TEXT
+## 4.1 pick_random_eye_color(p_locale, ..., p_stream) → TEXT
 
 Random eye color, uniformly selected from eye_colors for given locale.
 
 # 5. Component Generators
 
-5.1 gen_full_name(p_locale, p_seed, p_batch_index, p_index_in_batch) → TEXT
+## 5.1 gen_full_name(p_locale, p_seed, p_batch_index, p_index_in_batch) → TEXT
 
 Purpose: Generate a full human name with optional title and middle name.
 
@@ -375,12 +375,12 @@ Formatting depends on locale:
 
 en_US:
 
-<house> <street>, <city> <postal_code>
+house street, city postal_code
 
 
 de_DE:
 
-<street> <house>, <postal_code> <city>
+street house, postal_code city
 
 
 Example:
@@ -391,7 +391,7 @@ SELECT gen_address('en_US', 123, 0, 0);
 SELECT gen_address('de_DE', 123, 0, 0);
 -- "Bahnhofstraße 12, 10115 Berlin"
 
-5.3 gen_phone(p_locale, p_seed, p_batch_index, p_index_in_batch) → TEXT
+## 5.3 gen_phone(p_locale, p_seed, p_batch_index, p_index_in_batch) → TEXT
 
 Purpose: Generate phone numbers using locale-specific patterns.
 
@@ -418,7 +418,7 @@ Patterns can be:
 
 '+49 (0XXX) XXXXXXX' or '0XXX XXXXXXX' for de_DE, etc.
 
-5.4 gen_email(p_locale, p_seed, p_batch_index, p_index_in_batch) → TEXT
+## 5.4 gen_email(p_locale, p_seed, p_batch_index, p_index_in_batch) → TEXT
 
 Purpose: Generate realistic email addresses from the full name and locale-specific domains.
 
@@ -479,7 +479,7 @@ SELECT gen_email('de_DE', 123, 0, 0);
 
 # 6. Main Generators
 
-6.1 generate_fake_users(p_locale, p_seed, p_batch_size, p_batch_index) → SETOF fake_user
+## 6.1 generate_fake_users(p_locale, p_seed, p_batch_size, p_batch_index) → SETOF fake_user
 
 Purpose: Main entry point – generate a batch of fake users.
 
@@ -542,7 +542,7 @@ FROM generate_fake_users('en_US', 123, 10, 1);
 
 Same call repeated ⇒ identical results.
 
-6.2 benchmark_generate_fake_users(p_locale, p_seed, p_batch_size, p_batch_index, p_iterations)
+## 6.2 benchmark_generate_fake_users(p_locale, p_seed, p_batch_size, p_batch_index, p_iterations)
 
 Purpose: Measure throughput of the generator (users/second).
 
