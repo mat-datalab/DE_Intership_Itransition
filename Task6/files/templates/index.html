@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>SQL Data Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 4px 8px; font-size: 12px; }
+        th { background-color: #f0f0f0; }
+        form div { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <h1>Fake User Generator</h1>
+
+    <form method="post">
+        <div>
+            <label>Locale:
+                <select name="locale">
+                    <option value="en_US" {{ 'selected' if locale == 'en_US' else '' }}>en_US</option>
+                    <option value="de_DE" {{ 'selected' if locale == 'de_DE' else '' }}>de_DE</option>
+                </select>
+            </label>
+        </div>
+
+        <div>
+            <label>Seed:
+                <input type="number" name="seed" value="{{ seed }}">
+            </label>
+        </div>
+
+        <div>
+            <label>Batch size:
+                <input type="number" name="batch_size" value="{{ batch_size }}">
+            </label>
+        </div>
+
+        <!-- ukryty indeks batcha, zwiększany przy przycisku "Next batch" -->
+        <input type="hidden" name="batch_index" value="{{ batch_index }}">
+
+        <div>
+            <button type="submit" name="action" value="generate">Generate (reset batch)</button>
+            <button type="submit" name="action" value="next">Next batch</button>
+        </div>
+    </form>
+
+    <h2>Current batch index: {{ batch_index }}</h2>
+
+    {% if users %}
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Full name</th>
+                <th>Address</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Height (cm)</th>
+                <th>Weight (kg)</th>
+                <th>Eye color</th>
+                <th>Phone</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for u in users %}
+            <tr>
+                <td>{{ loop.index0 }}</td>
+                <td>{{ u.full_name }}</td>
+                <td>{{ u.address }}</td>
+                <td>{{ "%.6f"|format(u.latitude) }}</td>
+                <td>{{ "%.6f"|format(u.longitude) }}</td>
+                <td>{{ "%.1f"|format(u.height_cm) }}</td>
+                <td>{{ "%.1f"|format(u.weight_kg) }}</td>
+                <td>{{ u.eye_color }}</td>
+                <td>{{ u.phone }}</td>
+                <td>{{ u.email }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No data yet, submit the form.</p>
+    {% endif %}
+
+</body>
+</html>
