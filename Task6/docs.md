@@ -12,6 +12,7 @@ The main goals of the library are:
 Below is the detailed description of each function.
 
 1. Data Model Overview
+
 1.1 Enum and composite types
 CREATE TYPE name_type AS ENUM ('first', 'middle', 'last', 'title');
 
@@ -195,6 +196,7 @@ lon := lon_rad * 180 / pi();
 Resulting latitude and longitude have constant probability density on the sphere.
 
 3. Name and Title Helpers
+
 3.1 pick_random_name(p_locale, p_seed, p_batch_index, p_index_in_batch, p_stream, p_type) → TEXT
 
 Purpose: Pick a random name (first/middle/last) for a locale, ignoring gender.
@@ -289,11 +291,13 @@ Delegates to pick_title_for_gender(..., 'M') (e.g. Herr, Dr., Prof. for de_DE).
 This gives realistic mixture of Mr. and Sir without separate randomness.
 
 4. Other Lookup Helpers
+
 4.1 pick_random_eye_color(p_locale, ..., p_stream) → TEXT
 
 Random eye color, uniformly selected from eye_colors for given locale.
 
 5. Component Generators
+
 5.1 gen_full_name(p_locale, p_seed, p_batch_index, p_index_in_batch) → TEXT
 
 Purpose: Generate a full human name with optional title and middle name.
@@ -474,6 +478,7 @@ SELECT gen_email('de_DE', 123, 0, 0);
 -- "anna.schmidt14@mailbox.org"
 
 6. Main Generators
+
 6.1 generate_fake_users(p_locale, p_seed, p_batch_size, p_batch_index) → SETOF fake_user
 
 Purpose: Main entry point – generate a batch of fake users.
